@@ -1,0 +1,4 @@
+"0","colest3 <- colest2[c(""Eta"",""Sesso"")]"
+"0","colest3$logTrigliceridi <- log(colest2$Trigliceridi)"
+"0","colest3$logIndice <- log(colest2$Indice)"
+"0",""

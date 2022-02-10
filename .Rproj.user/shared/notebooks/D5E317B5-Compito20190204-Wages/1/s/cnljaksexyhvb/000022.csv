@@ -1,0 +1,1 @@
+"0","pairs(wages2[c(""logwage"", ""exper"", ""school"")], panel=panel.smooth)"

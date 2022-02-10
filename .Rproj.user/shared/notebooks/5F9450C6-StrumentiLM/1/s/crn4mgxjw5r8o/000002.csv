@@ -1,0 +1,1 @@
+"0","cars1w.lm <- lm(dist ~ speed + I(speed^2),data=datasets::cars)"

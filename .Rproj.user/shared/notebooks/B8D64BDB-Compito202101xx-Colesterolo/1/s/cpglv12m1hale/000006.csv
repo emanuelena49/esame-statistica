@@ -1,0 +1,2 @@
+"0","colest <- read.table(""./data/colesterolo3.txt"", header = T)"
+"0","colest"

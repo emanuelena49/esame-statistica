@@ -1,0 +1,4 @@
+"0","# equivalente di pairs, solo che posso aggiungere il gruppo con il colore"
+"0","df <- DAAG::allbacks"
+"0","lattice::splom(~df[,1:3], groups=cover, data = df, "
+"0","               lwd=2, auto.key = T)"

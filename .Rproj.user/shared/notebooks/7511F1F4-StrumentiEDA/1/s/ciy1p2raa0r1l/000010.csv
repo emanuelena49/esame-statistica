@@ -1,0 +1,4 @@
+"0","autobi <- read.table(""../data/AutoBI.csv"", header = T, sep = "","")"
+"0","lattice::densityplot(~log(LOSS), group=ATTORNEY, data=autobi, xlab=""log(LOSS)"","
+"0","            lwd=2, plot.points=FALSE, auto.key=list(columns=2))"
+"0",""

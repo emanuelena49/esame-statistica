@@ -1,0 +1,5 @@
+"0","# gsummary.norm(sqrt(colest2$Indice), stats = T, plots = c(""curve"", ""qq""))"
+"0","# gsummary.norm(sqrt(colest2$Trigliceridi), stats = T, plots = c(""curve"", ""qq""))"
+"0",""
+"0","par(mfrow=c(1,1))"
+"0",""

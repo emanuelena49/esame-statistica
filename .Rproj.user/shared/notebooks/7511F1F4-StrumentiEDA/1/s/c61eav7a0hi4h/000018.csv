@@ -1,0 +1,3 @@
+"0","for (v in c(""disp"", ""hp"", ""drat"", ""wt"")) {"
+"0","  gsummary.num(v, data=datasets::mtcars)"
+"0","}"

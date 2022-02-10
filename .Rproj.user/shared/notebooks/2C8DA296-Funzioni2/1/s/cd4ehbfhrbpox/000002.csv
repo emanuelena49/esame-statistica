@@ -1,0 +1,3 @@
+"0","# pairs(mtcars[, c(""mpg"", ""disp"", ""hp"", ""drat"")], panel=panel.smooth)"
+"0","# cormatrix <- cor(mtcars[, c(""mpg"", ""disp"", ""hp"", ""drat"")], method = ""pearson"")"
+"0","# cormatrix"

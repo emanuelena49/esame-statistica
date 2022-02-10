@@ -1,0 +1,52 @@
+"0","gsummary.norm(""logwage"", data=wages2, stats = T, statsTest = T)"
+"1","[1]"
+"1"," ""NORMALITA' DI logwage"""
+"1","
+"
+"1","      Mean "
+"1","      Var. "
+"1","     Skew. "
+"1","     Kurt. "
+"1","
+"
+"1"," 1.5891125 "
+"1"," 0.3931602 "
+"1","-1.1184400 "
+"1"," 7.2836901 "
+"1","
+"
+"1","
+Title:
+ "
+"1",""
+"1","D'Agostino Normality Test"
+"1",""
+"1","
+"
+"1","
+Test Results:
+"
+"1","  STATISTIC:
+"
+"1","    Chi2 | Omnibus: 788.4181
+"
+"1","    Z3  | Skewness: -21.5081
+"
+"1","    Z4  | Kurtosis: 18.0505
+"
+"1","  P VALUE:
+"
+"1","    Omnibus  Test: < 2.2e-16 
+"
+"1","    Skewness Test: < 2.2e-16 
+"
+"1","    Kurtosis Test: < 2.2e-16 
+"
+"1","
+Description:
+ "
+"1",""
+"1","Thu Feb 10 18:37:48 2022 by user: Proprietario"
+"1","
+
+"

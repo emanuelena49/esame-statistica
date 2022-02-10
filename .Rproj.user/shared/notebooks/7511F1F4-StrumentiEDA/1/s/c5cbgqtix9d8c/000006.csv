@@ -1,0 +1,1 @@
+"0","lattice::xyplot(income ~ balance, groups=default, data=ISLR::Default, auto.key=list(columns=2))"

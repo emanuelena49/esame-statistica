@@ -1,0 +1,259 @@
+---
+title: "Compito 4/02/2019"
+author: "Emanuele Lena - 142411@uniud"
+date: "10/2/2022"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+```{r}
+knitr::knit('Funzioni2.Rmd')
+```
+
+
+Let us consider the dataframe wages, which containes information about 3294 USA working individuals. The data are taken from the National Longitudinal Survey and are related to 1987. The variable as are listed below and the output of the str command is given
+
+A data frame with 3294 observations on the following 4 variables.
+exper <- experience in years
+male <- 1 male, 0 female
+school <- years of schooling
+wage <- wage (in 1980$) per hour
+region <- Center, North, South
+   
+The aim of the study is to analyze the potential relationship between the response variable wage and the explanatory variables considered in the dataframe.
+
+
+```{r}
+wages <- read.table("./data/Wages-New.txt", header = TRUE)
+wages$male <- factor(wages$male)
+wages$region <- factor(wages$region)
+summary(wages)
+```
+
+```{r}
+par(mfrow=c(1,2))
+for (v in c("exper", "school")) {
+  gsummary.num(v, data=wages, smoothCurve = F, stats = T)
+}
+par(mfrow=c(1,1))
+
+```
+
+
+exper e school sono due variabili numeriche intere. Le loro distribuzioni di probabilità sono riconducibili a campane più o meno normali. Esper risulta piuttosto simmetrica e le sue code risultano in linea con quelle di una distribuzione normale (dall'indice). 
+
+school soffre di una leggera assimmetria sinistra (evidente sia dall'istogramma, che dal boxplot e dall'indice di assim.) e presenta code più pesanti. Entrambi le funzioni presentano numerosi valori etichettati come outlyer
+
+
+```{r}
+par(mfrow=c(1,1))
+
+gsummary.num("wage", data=wages, stats = F, horizontalBoxplot = T)
+
+par(mfrow=c(1,1))
+
+summary.num("wage", data=wages, calcIndexes = F)
+```
+
+La variabile risposta wage è una variabile numerica continua. La sua curva di densità risulta fortemente concentrata a sinistra, con numerose osservazioni anche molto estreme. Tale tipo di variabile, probabilmente potrebbe risultare più "normale" se considerata in scala logaritmica.
+
+```{r}
+wages2 <- wages
+wages2$logwage <- log(wages$wage)
+
+# par(mfrow=c(1,2))
+
+gsummary.num("logwage", data=wages2, stats = F, horizontalBoxplot = T, normCurve = T)
+gsummary.norm("logwage", data=wages2, stats = T, statsTest = T)
+
+
+# par(mfrow=c(1,1))
+
+```
+
+Anche riportando la var in scala logaritmica si ottiene una campana non normale. Innanzitutto si osserva una campana piuttosto stretta (rispetto a quella attesa). Questa volta, si osserva un'assimmetria sinistra e delle code classificate come pesanti dall'indice di curtosi.
+
+In ongi caso, questa trasformazione è certamente un miglioramento.
+
+
+```{r}
+par(mfrow=c(2,2))
+
+gsummary.factor("region", data=wages, stats = T, 
+                pieLabels = T, plots = c("rel", "pie"))
+
+
+gsummary.factor("male", data=wages, stats = T, 
+                pieLabels = T, plots = c("rel", "pie"))
+  
+par(mfrow=c(1,1))
+```
+
+Infine, le categoriali categoriali region e male sembrano essere abbastanza uniformamente distribuite.
+
+
+```{r}
+pairs(wages2[c("logwage", "exper", "school")], panel=panel.smooth)
+
+par(mfrow=c(1,2))
+
+cor.check.num(x="exper", y="logwage", data=wages2, doPlot = T, stats = F)
+cor.check.num(x="school", y="logwage", data=wages2, doPlot = T, stats = F)
+
+cor.check.factor.num(xfactor = "male", y="logwage", data=wages2, stats = F)
+cor.check.factor.num(xfactor = "region", y="logwage", data=wages2, stats = F)
+
+par(mfrow=c(1,1))
+```
+
+Dai grafici, non sembra trasparire alcuna correlazione particolarmente significativa tra logwage e le diverse variabili. 
+
+Le relazioni con school ed exper sembrano essere molto deboli e non lineari (i dati sono parecchio variabili) e region sembra essere totalmente ininfluente (se non fosse che per un certo livello si osserva maggiore variabilità).
+
+```{r}
+t.test.between.groups("male", "logwage", data=wages2)
+```
+
+Da un confronto sulle medie per gruppo, il fattore male sembra essere significativo.
+
+Si calcolano gli indici di pearson e spearman come metriche per la significatività delle variabili numeriche:
+
+```{r}
+cor(wages2[c("logwage", "school", "exper")], method = "pearson")
+
+cor(wages2[c("logwage", "school", "exper")], method = "spearman")
+
+```
+
+Da tali coefficenti school sembra essere il parametro più significativo.
+
+
+Procediamo definendo un modello di regressione lineare completo:
+
+```{r}
+wages2.lm <- lm(logwage~exper+school+male+region, data=wages2)
+summary(wages2.lm)
+
+```
+
+Dai test t sui regressori: exper, school e male=1 risultano tutti fattori rilevanti di effetto positivo sul modello.
+Non c'è invece altrettanto sostegno a fronte dell'utilità del fattore region.
+
+La varianza spiegata, come previsto, è abbastanza bassa (i dati risultano parecchio variabili).
+
+Il modello, in generale, dal test F risulta significativo rispetto al modello nullo. 
+
+
+```{r}
+par(mfrow=c(1,2))
+plot(wages2.lm, which = (1:6))
+par(mfrow=c(1,1))
+```
+
+Dalle diagnostiche:
+
+* non si osservano pattern strani sui residui
+* la variabilità dei residui risulta uniforme
+* nessun punto risulta avere un influenza particolarmente elevata in senso assoluto.
+
+
+```{r}
+anova(wages2.lm)
+```
+
+Anche da un test anova, si conferma bassa significatività di region. Per tale motivo, si sperimenta la sua rimozione dal modello.
+
+```{r}
+wages2.lm2 <- lm(logwage~exper+school+male, data=wages2)
+summary(wages2.lm2)
+
+AIC(wages2.lm, wages2.lm2)
+BIC(wages2.lm, wages2.lm2)
+```
+
+Rimuovendo region dal modello però si osserva un leggero peggioramento nell'indice di determinazione (sia normale che corretto) e nell'AIC. Il BIC invece vede un leggero miglioramento. 
+
+Si prosegue indagando su eventuali effetti iterazione, confusione e collinearità. 
+
+In particolare: 
+
+- si vuole studiare la relazione tra il fattore male e gli altri regressori
+- si vuole studiare eventuali effetti combinati interessanti su expr e school.
+
+```{r}
+# pairs(wages2[c("logwage", "exper", "school")], col=wages2$male)
+
+par(mfrow=c(1,2))
+
+cor.check.factor.num(xfactor = "male", y="school", data=wages2)
+cor.check.factor.num(xfactor = "male", y="exper", data=wages2)
+
+par(mfrow=c(1,1))
+
+summary.lm(aov(school~male, data=wages2))
+summary.lm(aov(exper~male, data=wages2))
+
+
+```
+
+Si osserva che le osservazioni del gruppo male=1, tendenzialmente sembrano avere valori più bassi per school e valori più alti per exper. 
+
+La seconda correlazione potrebbe essere indice di effetto confusione (i maschi sembrano guadagnare di più visto che hanno più esperienza), detto ciò anche la relazione con school è curiosa.
+
+Proviamo a sperimentare che succede considerando l'iterazione tra school e male e tra exper e male:
+
+```{r}
+wages2.lm3 <- lm(logwage~school*male+exper*male, data=wages2)
+summary(wages2.lm3)
+```
+
+Si osserva che:
+
+* il fattore male, preso di per se perde di significatività (ma rimane comunque rilevante)
+* l'iterazione tra school e male non risulta significativa
+* anche l'iterazione tra male ed experience non risulta significativa (anche se in misura minore rispetto ad exper)
+* al contrario, school ed exper rimangono le due varaibili esplicative più rilevanti.
+
+Da ciò si potrebbe dedurre che parte della significatività del fattore male nel modello precedente potrebbe derivare dalla sua correlazione con exper. Detto ciò, il fattore rimane leggermente significativo anche preso di per se.
+
+
+```{r}
+cor.check.num("school", "exper", data=wages2, stats = T, whichStats = c("pearson", "spearman", "kendal"))
+```
+
+Tra school ed exper sembra esserci una correlazione inversa leggera, non di tipo propriamente lineare.
+
+
+Per concludere, in quest'analisi la grande variabilità dei dati (in particolare la distribuzione "estrema" di wage) ha reso difficile trovare una chiara correlazione. Alcuni step successivi possibili potrebbero essere:
+
+* la considerazione separata dei "casi normali" (stipendi medio-bassi) e dei casi estremi (stipendi molto alti), magari in due modelli distinti
+
+* la considerazione di analisi prelinimari alternative, basate magari su tecniche di clustering
+
+
+
+
+
+
+
+
+```{r}
+summary(wages2)
+```
+
+
+
+
+
+
+
+
+
+
+
+
+   

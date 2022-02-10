@@ -1,0 +1,7 @@
+"0","autobi <- read.table(""../data/AutoBI.csv"", header = T, sep = "","")"
+"0",""
+"0","lattice::bwplot(log(LOSS)~ ATTORNEY + CLMSEX + MARITAL + CLMINSUR + SEATBELT + AGECLASS,"
+"0","  data=autobi, ylab=""log(LOSS)"", outer = T, scales = list(x = ""free""),"
+"0","  xlab="""", layout=c(3,2), main="""", aspect=""fill"")"
+"2","Error in eval(i, data, env) : object 'AGECLASS' not found
+"

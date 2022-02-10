@@ -1,0 +1,1 @@
+"0","pairs(datasets::mtcars[c(""mpg"", ""disp"", ""hp"", ""drat"", ""wt"")], panel=panel.smooth)"

@@ -1,0 +1,5 @@
+"0","# test chi-quadro"
+"0","# chisq.test(datasets::warpbreaks$wool, datasets::warpbreaks$tension)"
+"0",""
+"0","# tabella di contingenza con val marginali in chiaro"
+"0","# epitools::table.margins(table(datasets::warpbreaks$wool, datasets::warpbreaks$tension))"

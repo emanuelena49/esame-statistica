@@ -1,0 +1,2 @@
+"0","# Metto a fianco due plot (1 x lv di wool)"
+"0","lattice::stripplot(breaks ~ tension | wool, datasets::warpbreaks, cex=1.2, pch=16)"

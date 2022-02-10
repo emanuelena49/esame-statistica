@@ -1,0 +1,8 @@
+"0","# esempio di xyplot con punti colorati e tre rette sovrapposte"
+"0","lattice::xyplot(tempDiff ~ vapPress, DAAG::leaftemp, groups=CO2level, pch=19, "
+"0","                key=lattice::simpleKey("
+"0","                  columns=3,                               # quanti gruppi "
+"0","                  text=c(""low"", ""medium"", ""high""),         # quali nomi nella legenda per i gruppi"
+"0","                  col=c(""blue"", ""magenta"", ""darkgreen""),   # quali colori per i gruppi"
+"0","                  space=""top"", points=FALSE, cex=1.2), "
+"0","                type=c(""p"",""r""),lwd=2)"

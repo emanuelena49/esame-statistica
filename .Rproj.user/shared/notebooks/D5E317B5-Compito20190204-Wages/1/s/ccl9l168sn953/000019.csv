@@ -1,0 +1,6 @@
+"0","wages2 <- wages"
+"0","wages2$logwage <- log(wages$wage)"
+"0",""
+"0","# par(mfrow=c(1,2))"
+"0",""
+"0","gsummary.num(""logwage"", data=wages2, stats = F, horizontalBoxplot = T, normCurve = T)"

@@ -1,0 +1,55 @@
+"0","par(mfrow=c(1,2))"
+"0","gsummary.norm(""mpg"", data=datasets::mtcars, "
+"0","              plots = c(""curve"", ""qq""), "
+"0","              stats=T, statsTest=T)"
+"1","[1]"
+"1"," ""NORMALITA' DI mpg"""
+"1","
+"
+"1","      Mean "
+"1","      Var. "
+"1","     Skew. "
+"1","     Kurt. "
+"1","
+"
+"1","20.0906250 "
+"1","36.3241028 "
+"1"," 0.6404399 "
+"1"," 2.7994668 "
+"1","
+"
+"1","
+Title:
+ "
+"1",""
+"1","D'Agostino Normality Test"
+"1",""
+"1","
+"
+"1","
+Test Results:
+"
+"1","  STATISTIC:
+"
+"1","    Chi2 | Omnibus: 2.7141
+"
+"1","    Z3  | Skewness: 1.6351
+"
+"1","    Z4  | Kurtosis: 0.2015
+"
+"1","  P VALUE:
+"
+"1","    Omnibus  Test: 0.2574 
+"
+"1","    Skewness Test: 0.102 
+"
+"1","    Kurtosis Test: 0.8403 
+"
+"1","
+Description:
+ "
+"1",""
+"1","Thu Feb 10 21:04:55 2022 by user: Proprietario"
+"1","
+
+"

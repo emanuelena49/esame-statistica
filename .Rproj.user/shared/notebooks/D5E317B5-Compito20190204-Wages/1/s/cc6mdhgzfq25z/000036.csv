@@ -1,0 +1,5 @@
+"0","# pairs(wages2[c(""logwage"", ""exper"", ""school"")], col=wages2$male)"
+"0",""
+"0","par(mfrow=c(1,2))"
+"0",""
+"0","cor.check.factor.num(xfactor = ""male"", y=""school"", data=wages2)"

@@ -1,0 +1,221 @@
+---
+title: "Compito xx/01/2021"
+author: "Emanuele Lena - 142411@uniud"
+date: "10/2/2022"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+```{r}
+knitr::knit('Funzioni2.Rmd')
+```
+
+
+
+
+```{r}
+colest <- read.table("./data/colesterolo3.txt", header = T)
+colest
+```
+
+Indice ~ Sesso + Eta + Trigliceridi
+
+```{r}
+colest2 <- colest[c("Indice", "Sesso", "Eta", "Trigliceridi")]
+colest2$Sesso <- factor(colest$Sesso)
+
+summary(colest2)
+nrow(colest2)
+```
+
+```{r}
+par(mfrow=c(2,2))
+
+gsummary.num("Indice", data=colest2)
+gsummary.num("Trigliceridi", data=colest2)
+gsummary.num("Eta", data=colest2)
+gsummary.factor("Sesso", data=colest2)
+
+par(mfrow=c(1,1))
+
+
+```
+
+Le variabili risposta Indice e Trigliceridi sono caratt. da curve di densità a campana ma "spostate a sinistra". In entrambi i casi si osserva assimetria e una coda destra costituita da numerose classificazioni indicate dai boxplot oltre il baffo del boxplot.
+
+Anche età a suo modo è assimmetrica, con una coda più lunga ma a sinistra.
+
+```{r}
+par(mfrow=c(2,2))
+
+gsummary.norm(colest2$Indice, stats = T, plots = c())
+gsummary.norm(colest2$Trigliceridi, stats = T, plots = c())
+
+gsummary.norm(log(colest2$Indice), stats = T, plots = c("curve", "qq"))
+gsummary.norm(log(colest2$Trigliceridi), stats = T, plots = c("curve", "qq"))
+
+# gsummary.norm(sqrt(colest2$Indice), stats = T, plots = c("curve", "qq"))
+# gsummary.norm(sqrt(colest2$Trigliceridi), stats = T, plots = c("curve", "qq"))
+
+par(mfrow=c(1,1))
+
+```
+
+Sia per Indice che per Trigliceridi si osserva come l'introduzione della scala logaritmica rende la curva più simile ad una normale (e "aggiusta" anche gli indici di assim. e curtosi)
+
+```{r}
+colest3 <- colest2[c("Eta","Sesso")]
+colest3$logTrigliceridi <- log(colest2$Trigliceridi)
+colest3$logIndice <- log(colest2$Indice)
+
+```
+
+
+### Correlazione tra variabili
+
+```{r}
+pairs(colest3[c("logIndice", "logTrigliceridi", "Eta")], panel=panel.smooth)
+cor(colest3[c("logIndice", "logTrigliceridi", "Eta")], method = "pearson")
+cor(colest3[c("logIndice", "logTrigliceridi", "Eta")], method = "spearman")
+
+```
+
+Si osserva che logIndice presenta una correlazione (lineare) con logTrigliceridi. Eta invece sembra essere apparentemente meno influente.
+
+```{r}
+cor.check.factor.num(xfactor = "Sesso", y="logIndice", data=colest3, 
+                     doPlot = T, doPlotLines = F, doMeanTest = T, doAnova = F, stats=T)
+```
+
+Il sesso - dai grafici e dal confronto tra medie camp. per gruppo - sembra essere significativo (con val inferiori per le donne).
+
+### Modello lineare
+
+Partiamo dalla definizione di un modello completo
+```{r}
+colest3.lm1 <- lm(logIndice~logTrigliceridi+Eta+Sesso, data=colest3)
+summary(colest3.lm1)
+```
+
+Dal modello completo, si osserva che logTrigliceridi e il fattore Sesso risultano altamente significativi. Al contrario, Eta sembra essere meno rilevante, ma comunque significativo.
+
+Dall'indice di determ. (e dalla sua v. corretta) si osserva che viene spiegata una quantità discreta di variabilità.
+
+L'F-test infine indica che il modello - complessivamente - è esplicativo per i dati.
+
+
+```{r}
+par(mfrow=c(1,2))
+
+plot(colest3.lm1, which=(1:6))
+
+par(mfrow=c(1,1))
+```
+
+Dalle diagnositche si nota che:
+
+* a parte una concentrazione di oss. sui fitted values più bassi, non sembrano esserci pattern importanti sui residui;
+* la variabilità dei residui aumenta leggermente per fitted values più alti
+* i residui seguono una distribuzione abbastanza normale
+* non ci sono osservazioni particolarmente influenti in senso assoluto
+
+## Indagini per migliorie
+
+Il modello creato sembra essere già esplicativo per i dati, detto ciò si vuole provare a valutarne qualche miglioramento.
+
+Si prova ad indagare su eventuali effetti nati dall'iterazione tra Sesso e le variabili numeriche:
+
+```{r}
+par(mfrow=c(1,2))
+cor.check.factor.num(xfactor = "Sesso", y="Eta", data=colest3, 
+                     doPlot = T, doPlotLines = F, doMeanTest = T, doAnova = F, stats=T)
+cor.check.factor.num(xfactor = "Sesso", y="logTrigliceridi", data=colest3, 
+                     doPlot = T, doPlotLines = F, doMeanTest = T, doAnova = F, stats=T)
+par(mfrow=c(1,1))
+
+```
+
+Da questi confronti delle medie campionarie per gruppo e dai boxplot, non sembra esserci una correlazione tra sesso ed Eta, mentre il livello di logTrigliceridi per M sembra essere maggiore rispetto ad F.
+
+Proviamo a considerare il modello con l'effetto iterazione tra Sesso ed Eta e Sesso e logTrigliceridi
+
+```{r}
+colest3.lm2 <- lm(logIndice~Eta+logTrigliceridi*Sesso, data = colest3)
+summary(colest3.lm2)
+```
+
+L'introduzione dell'effetto iterazione non sembra portare miglioramenti significativi al modello.
+
+```{r}
+anova(colest3.lm2)
+```
+
+Ciò è evidende anche da un test di confronto della varianza.
+
+### Previsione
+
+Visto che non sembrano esserci necessità di effettuare miglioramenti al modello, indaghiamo sulla sua bontà predittiva. 
+
+Partiamo ricavando i due MSE sui dati di trainig e in cross validation.
+
+```{r}
+colest3.glm <- glm(logIndice~logTrigliceridi+Eta+Sesso, data=colest3)
+
+glm.mse.train(colest3.glm)
+glm.mse.test.cv(colest3.glm)
+```
+
+Proviamo ad utilizzare il modello per ricavare alcuni intervalli di stima e di previsione, per diversi livelli di Trigliceridi, fissata un'età e un sesso.
+```{r}
+summary(colest2)
+```
+
+
+
+```{r}
+
+# 100 oss, eta=55, sesso=F
+test.data <- data.frame(
+  Trigliceridi=seq(30, 680, length.out = 100), 
+  Eta=rep(55, 100), 
+  Sesso=rep("F", 100)
+)
+
+test.data$logTrigliceridi <- log(test.data$Trigliceridi)
+
+stime <- predict(colest3.lm1, newdata=test.data, interval="confidence")
+pred <- predict(colest3.lm1, newdata=test.data, interval="prediction")
+
+# riporto in scala normale
+stime2 <- exp(stime)
+pred2 <- exp(pred)
+  
+plot(test.data$Trigliceridi, stime2[, "fit"], type="l", xlab = "Trigliceridi", ylab = "Indice")
+
+lines(test.data$Trigliceridi, stime2[, "lwr"], lty = 2, lwd=2, col="red")
+lines(test.data$Trigliceridi, stime2[, "upr"], lty = 2, lwd=2, col="red")
+
+lines(test.data$Trigliceridi, pred2[, "lwr"], lty = 2, lwd=2, col="black")
+lines(test.data$Trigliceridi, pred2[, "upr"], lty = 2, lwd=2, col="black")
+
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+   

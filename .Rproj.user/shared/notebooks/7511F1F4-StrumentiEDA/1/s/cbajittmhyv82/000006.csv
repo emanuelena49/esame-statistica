@@ -1,0 +1,4 @@
+"0","## costruzione di 6 plot sovrapposti"
+"0","lattice::xyplot(Ontario+Quebec+BC+Alberta+Prairies+Atlantic ~ Date, data=DAAG::jobs,"
+"0","                type=""b"", outer=FALSE, ylab=""Number of workers"","
+"0","                auto.key=list(space=""right"", lines=TRUE))"

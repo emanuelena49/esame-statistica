@@ -1,0 +1,2 @@
+"0","par(mfrow=c(1,2))"
+"0","plot(wages2.lm, which = (1:6))"

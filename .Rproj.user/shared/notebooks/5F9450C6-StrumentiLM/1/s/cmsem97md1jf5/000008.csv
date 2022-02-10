@@ -1,0 +1,6 @@
+"0",""
+"0","# calcolo del lambda massimo"
+"0","lambdares <- boxcox(mod, lambda = seq(0, 2, 0.05), plotit=F, interp=F)"
+"2","Error in boxcox(mod, lambda = seq(0, 2, 0.05), plotit = F, interp = F) : 
+  could not find function ""boxcox""
+"

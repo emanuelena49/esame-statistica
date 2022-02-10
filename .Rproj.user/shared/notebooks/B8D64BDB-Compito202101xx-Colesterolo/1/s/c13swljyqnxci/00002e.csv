@@ -1,0 +1,2 @@
+"0",""
+"0","lines(test.data$Trigliceridi, pred2[, ""lwr""], lty = 2, lwd=2, col=""black"")"

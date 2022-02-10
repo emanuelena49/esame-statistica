@@ -1,0 +1,5 @@
+"0","par(mfrow=c(2,2))"
+"0",""
+"0","for(v in c(""jobclass"", ""health"", ""maritl"", ""region"")) {"
+"0","  gsummary.factor(v, data=ISLR::Wage, plots = c(""abs""), pieLabels = F)"
+"0","}"

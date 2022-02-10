@@ -1,0 +1,4 @@
+"0","# costruzione di 6 plot distinti, uno per ciascuna serie, in scala logaritmica"
+"0","lattice::xyplot(Ontario+Quebec+BC+Alberta+Prairies+Atlantic ~ Date, data=DAAG::jobs, "
+"0","                type=""b"", outer=TRUE, ylab=""log(Number of workers)"", layout=c(3,2),"
+"0","                scales=list(y=list(relation=""sliced"", log=TRUE)))"

@@ -1,0 +1,4 @@
+"0","mod <- lm(time ~ climb + dist, data=DAAG::nihills)"
+"0",""
+"0","# grafico del boxcox"
+"0","MASS::boxcox(mod, lambda = seq(0, 2, 0.05))"

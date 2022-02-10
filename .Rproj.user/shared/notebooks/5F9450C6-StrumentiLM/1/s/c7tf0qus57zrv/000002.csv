@@ -1,0 +1,5 @@
+"0","# utile quando la varianza dei residui dipende da qualche regressore"
+"0","# es: nel mod. senza il metodo dei pesi, oss. che i residui aumentano al crescere di speed"
+"0","#     => provo a bilanciare in questo modo"
+"0","cars2w.lm <- lm(dist ~ speed + I(speed^2),data=datasets::cars,weights=1/speed)"
+"0",""
